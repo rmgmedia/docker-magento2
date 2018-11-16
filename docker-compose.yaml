@@ -7,10 +7,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - ./src/magento:/var/www/magento
-#      - ./config/nginx.conf:/etc/nginx/nginx.conf
-#      - ./config/nginx/sites-available:/etc/nginx/sites-available
     depends_on:
       - php-fpm
   php-fpm:
@@ -24,6 +23,8 @@ services:
       - mysql
       - redis-obj
       - redis-ses
+    env_file:
+      - .env
   mysql:
     image: percona:5.7
     restart: always
@@ -33,7 +34,6 @@ services:
       - mysql-log:/var/log/mysql
       - mysql-lib:/var/lib/mysql
     environment:
-      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
