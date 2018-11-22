@@ -22,6 +22,8 @@ services:
       - redis-obj
       - redis-fpc
       - redis-ses
+      - elasticsearch
+      - rabbitmq
     restart: always
     volumes:
       - ./src/magento:/var/www/magento:cached
@@ -61,6 +63,18 @@ services:
     restart: always
     volumes:
       - ./config/redis/ses.conf:/usr/local/etc/redis/redis.conf
+  elasticsearch:
+    image: elasticsearch:6.5.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: always
+  rabbitmq:
+    image: rabbitmq:3.7.8-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
 volumes:
   mysql-log:
   mysql-lib:
