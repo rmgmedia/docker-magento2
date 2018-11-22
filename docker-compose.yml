@@ -6,15 +6,11 @@ services:
     image: nginx:1.15
     ports:
       - "80:80"
-      - "443:443"
     restart: always
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:cached
-      - ./config/nginx/dhparam.pem:/etc/nginx/dhparam.pem:cached
-      - ./config/nginx/conf.d:/etc/nginx/conf.d:cached
+      - ./config/nginx/conf.d/magento.conf:/etc/nginx/conf.d/magento.conf:cached
       - ./src/magento:/var/www/magento:cached
-      - ./config/nginx/ssl/certs:/etc/nginx/ssl/certs:cached
-      - ./config/nginx/ssl/private:/etc/nginx/ssl/private:cached
   php-fpm:
     build: ./docker/php-fpm
     env_file:

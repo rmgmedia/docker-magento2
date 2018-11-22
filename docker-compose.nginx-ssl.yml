@@ -1,0 +1,10 @@
+version: '3'
+services:
+  nginx:
+    ports:
+      - "443:443"
+    volumes:
+      - ./config/nginx/conf.d/magento-ssl.conf:/etc/nginx/conf.d/magento-ssl.conf:cached
+      - ./config/nginx/dhparam.pem:/etc/nginx/dhparam.pem:cached
+      - ./config/nginx/ssl/certs:/etc/nginx/ssl/certs:cached
+      - ./config/nginx/ssl/private:/etc/nginx/ssl/private:cached
