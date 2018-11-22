@@ -3,7 +3,7 @@ upstream fastcgi_backend {
 }
 
 server {
-  listen 80;
+  listen ${NGINX_PORT};
   server_name magento.local-rmgmedia.com;
   set $MAGE_ROOT /var/www/magento;
   set $MAGE_MODE default;

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx:
+    build:
+      args:
+        nginx_port: 8080
+    ports:
+      - "8080:8080"
+  php-fpm:
+    depends_on:
+      - varnish
+  varnish:
+    environment:
+      - VCL_CONFIG=${VCL_CONFIG}
+      - VARNISHD_PARAMS=${VARNISHD_PARAMS}
+    image: million12/varnish
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+      - ./config/varnish/varnish.vcl:/data/varnish.vcl:cached

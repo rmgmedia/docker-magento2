@@ -1,6 +1,6 @@
 FROM php:7.1-fpm
 
-LABEL maintainer="Ryan Gellis <rgellis@rmgmedia.com>"
+LABEL maintainer="Ryan Gellis <ryan.gellis@rmgmedia.com>"
 
 ENV COMPOSER_HOME /var/www/.composer
 
@@ -32,3 +32,5 @@ USER www-data
 COPY --from=composer:1.5 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/magento
+
+#ENTRYPOINT ["/var/www/install-magento.sh"]
