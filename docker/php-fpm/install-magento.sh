@@ -100,96 +100,13 @@ if [ -z "$(ls -A /var/www/magento)" ]; then
   echo "Running Magento install: /var/www/magento/bin/magento setup:install ${install_args[@]}"
   /var/www/magento/bin/magento setup:install "${install_args[@]}"
 
-  redis_obj_args=()
   if [[ "${MAGENTO_REDIS_OBJ_SERVER}" ]]; then
-    redis_obj_args+=("--cache-backend-redis-server=$MAGENTO_REDIS_OBJ_SERVER")
+    /var/www/configure-redis-obj.sh
   fi
-  if [[ "${MAGENTO_REDIS_OBJ_PORT}" ]]; then
-    redis_obj_args+=("--cache-backend-redis-port=$MAGENTO_REDIS_OBJ_PORT")
-  fi
-  if [[ "${MAGENTO_REDIS_OBJ_DATABASE}" ]]; then
-    redis_obj_args+=("--cache-backend-redis-db=$MAGENTO_REDIS_OBJ_DATABASE")
-  fi
-  if [[ "${MAGENTO_REDIS_OBJ_PASSWORD}" ]]; then
-    redis_obj_args+=("--cache-backend-redis-password=$MAGENTO_REDIS_OBJ_PASSWORD")
-  fi
-  echo "Setting up Redis object cache: /var/www/magento/bin/magento setup:config:set --cache-backend=redis ${redis_obj_args[@]}"
-  /var/www/magento/bin/magento setup:config:set --cache-backend=redis "${redis_obj_args[@]}"
-
-  redis_fpc_args=()
   if [[ "${MAGENTO_REDIS_FPC_SERVER}" ]]; then
-    redis_fpc_args+=("--page-cache-redis-server=$MAGENTO_REDIS_FPC_SERVER")
+    /var/www/configure-redis-fpc.sh
   fi
-  if [[ "${MAGENTO_REDIS_FPC_PORT}" ]]; then
-    redis_fpc_args+=("--page-cache-redis-port=$MAGENTO_REDIS_FPC_PORT")
-  fi
-  if [[ "${MAGENTO_REDIS_FPC_DATABASE}" ]]; then
-    redis_fpc_args+=("--page-cache-redis-db=$MAGENTO_REDIS_FPC_DATABASE")
-  fi
-  if [[ "${MAGENTO_REDIS_FPC_PASSWORD}" ]]; then
-    redis_fpc_args+=("--page-cache-redis-password=$MAGENTO_REDIS_FPC_PASSWORD")
-  fi
-  if [[ "${MAGENTO_REDIS_FPC_COMPRESS_DATA}" ]]; then
-    redis_fpc_args+=("--page-cache-redis-compress-data=$MAGENTO_REDIS_FPC_COMPRESS_DATA")
-  fi
-  echo "Setting up Redis page cache: /var/www/magento/bin/magento setup:config:set --page-cache=redis ${redis_fpc_args[@]}"
-  /var/www/magento/bin/magento setup:config:set --page-cache=redis "${redis_fpc_args[@]}"
-
-  redis_ses_args=()
   if [[ "${MAGENTO_REDIS_SES_SERVER}" ]]; then
-    redis_ses_args+=("--session-save-redis-host=$MAGENTO_REDIS_SES_SERVER")
+    /var/www/configure-redis-ses.sh
   fi
-  if [[ "${MAGENTO_REDIS_SES_PORT}" ]]; then
-    redis_ses_args+=("--session-save-redis-port=$MAGENTO_REDIS_SES_PORT")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_DATABASE}" ]]; then
-    redis_ses_args+=("--session-save-redis-db=$MAGENTO_REDIS_SES_DATABASE")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_PASSWORD}" ]]; then
-    redis_ses_args+=("--session-save-redis-password=$MAGENTO_REDIS_SES_PASSWORD")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_TIMEOUT}" ]]; then
-    redis_ses_args+=("--session-save-redis-timeout=$MAGENTO_REDIS_SES_TIMEOUT")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_PERSISTENT_ID}" ]]; then
-    redis_ses_args+=("--session-save-redis-persistent-id=$MAGENTO_REDIS_SES_PERSISTENT_ID")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_COMPRESSION_THRESHOLD}" ]]; then
-    redis_ses_args+=("--session-save-redis-compression-threshold=$MAGENTO_REDIS_SES_COMPRESSION_THRESHOLD")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_COMPRESSION_LIB}" ]]; then
-    redis_ses_args+=("--session-save-redis-compression-lib=$MAGENTO_REDIS_SES_COMPRESSION_LIB")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_LOG_LEVEL}" ]]; then
-    redis_ses_args+=("--session-save-redis-log-level=$MAGENTO_REDIS_SES_LOG_LEVEL")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_MAX_CONCURRENCY}" ]]; then
-    redis_ses_args+=("--session-save-redis-max-concurrency=$MAGENTO_REDIS_SES_MAX_CONCURRENCY")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_BREAK_AFTER_FRONTEND}" ]]; then
-    redis_ses_args+=("--session-save-redis-break-after-frontend=$MAGENTO_REDIS_SES_BREAK_AFTER_FRONTEND")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_BREAK_AFTER_ADMINHTML}" ]]; then
-    redis_ses_args+=("--session-save-redis-break-after-adminhtml=$MAGENTO_REDIS_SES_BREAK_AFTER_ADMINHTML")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_FIRST_LIFETIME}" ]]; then
-    redis_ses_args+=("--session-save-redis-first-lifetime=$MAGENTO_REDIS_SES_FIRST_LIFETIME")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_BOT_LIFETIME}" ]]; then
-    redis_ses_args+=("--session-save-redis-bot-first-lifetime=$MAGENTO_REDIS_SES_BOT_LIFETIME")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_DISABLE_LOCKING}" ]]; then
-    redis_ses_args+=("--session-save-redis-disable-locking=$MAGENTO_REDIS_SES_DISABLE_LOCKING")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_MIN_LIFETIME}" ]]; then
-    redis_ses_args+=("--session-save-redis-min-lifetime=$MAGENTO_REDIS_SES_MIN_LIFETIME")
-  fi
-  if [[ "${MAGENTO_REDIS_SES_MAX_LIFETIME}" ]]; then
-    redis_ses_args+=("--session-save-redis-max-lifetime=$MAGENTO_REDIS_SES_MAX_LIFETIME")
-  fi
-  echo "Setting up Redis sessions: /var/www/magento/bin/magento setup:config:set --session-save=redis ${redis_ses_args[@]}"
-  /var/www/magento/bin/magento setup:config:set --session-save=redis "${redis_ses_args[@]}"
-else
-  echo "Magento installation detected."
-  exit 1
 fi

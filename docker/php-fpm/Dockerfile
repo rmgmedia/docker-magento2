@@ -24,8 +24,8 @@ RUN apt-get update && apt-get install -y \
   && docker-php-ext-install zip \
 && rm -rf /var/lib/apt/lists/*
 
-COPY install-magento.sh /var/www/install-magento.sh
-RUN chown www-data:www-data /var/www/install-magento.sh && chmod +x /var/www/install-magento.sh
+COPY *.sh /var/www/
+RUN chown www-data:www-data /var/www/*.sh && chmod +x /var/www/*.sh
 
 USER www-data
 
