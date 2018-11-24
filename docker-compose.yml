@@ -18,17 +18,23 @@ services:
     env_file:
       - .env
     depends_on:
-      - mysql
-      - redis-obj
-      - redis-fpc
-      - redis-ses
+      - cron
       - elasticsearch
+      - mysql
       - rabbitmq
+      - redis-fpc
+      - redis-obj
+      - redis-ses
     restart: always
     volumes:
       - ./src/magento:/var/www/magento:cached
       - ./config/composer/auth.json:/var/www/.composer/auth.json:cached
       - ./config/php/php.ini:/usr/local/etc/php/php.ini:cached
+  cron:
+    build: ./docker/cron
+    restart: always
+    volumes:
+      - ./src/magento:/var/www/magento:cached
   mysql:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
