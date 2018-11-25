@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z "$(ls -A /var/www/magento)" ]; then
   echo "Downloading Magento installation from https://repo.magento.com"
-  composer create-project --repository=https://repo.magento.com/ magento/project-community-edition /var/www/magento
+  composer create-project --repository=https://repo.magento.com/ magento/project-community-edition /var/www/magento ${MAGENTO_VERSION}
 
   install_args=()
   if [[ "${MAGENTO_ADMIN_FIRSTNAME}" ]]; then

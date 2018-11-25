@@ -4,16 +4,19 @@ services:
     build:
       args:
         nginx_port: 80
+        nginx_version: ${NGINX_VERSION}
       context: ./docker/nginx
     depends_on:
       - php-fpm
-    image: nginx:1.15
     restart: always
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:cached
       - ./src/magento:/var/www/magento:cached
   php-fpm:
-    build: ./docker/php-fpm
+    build:
+      args:
+        php_version: ${PHP_VERSION}
+      context: ./docker/php-fpm
     env_file:
       - .env
     depends_on:
@@ -30,7 +33,10 @@ services:
       - ./config/composer/auth.json:/var/www/.composer/auth.json:cached
       - ./config/php/php.ini:/usr/local/etc/php/php.ini:cached
   cron:
-    build: ./docker/cron
+    build:
+      args:
+        php_version: ${PHP_VERSION}
+      context: ./docker/cron
     restart: always
     volumes:
       - ./src/magento:/var/www/magento:cached
@@ -40,7 +46,7 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-    image: percona:5.7
+    image: percona:${MYSQL_VERSION}
     ports:
       - "3306:3306"
     restart: always
@@ -48,13 +54,13 @@ services:
       - mysql-log:/var/log/mysql
       - mysql-lib:/var/lib/mysql
   redis-obj:
-    image: redis:5
+    image: redis:${REDIS_VERSION}
     ports:
       - "6379:6379"
     restart: always
   redis-fpc:
     command: redis-server /usr/local/etc/redis/redis.conf
-    image: redis:5
+    image: redis:${REDIS_VERSION}
     ports:
       - "6380:6380"
     restart: always
@@ -62,20 +68,20 @@ services:
       - ./config/redis/fpc.conf:/usr/local/etc/redis/redis.conf
   redis-ses:
     command: redis-server /usr/local/etc/redis/redis.conf
-    image: redis:5
+    image: redis:${REDIS_VERSION}
     ports:
       - "6381:6381"
     restart: always
     volumes:
       - ./config/redis/ses.conf:/usr/local/etc/redis/redis.conf
   elasticsearch:
-    image: elasticsearch:6.5.1
+    image: elasticsearch:${ELASTICSEARCH_VERSION}
     ports:
       - "9200:9200"
       - "9300:9300"
     restart: always
   rabbitmq:
-    image: rabbitmq:3.7.8-management
+    image: rabbitmq:${RABBITMQ_VERSION}-management
     ports:
       - "5672:5672"
       - "15672:15672"

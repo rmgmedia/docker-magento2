@@ -1,4 +1,5 @@
-FROM php:7.1-fpm
+ARG php_version=7.1
+FROM php:${php_version}-fpm
 
 LABEL maintainer="Ryan Gellis <ryan.gellis@rmgmedia.com>"
 

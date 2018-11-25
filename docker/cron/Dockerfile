@@ -1,4 +1,5 @@
-FROM php:7.1-cli
+ARG php_version=7.1
+FROM php:${php_version}-cli
 
 LABEL maintainer="Ryan Gellis <ryan.gellis@rmgmedia.com>"
 
